@@ -1,0 +1,16 @@
+plugins {
+    id 'application'
+}
+
+apply plugin: 'java'
+
+group 'ru.keyboard'
+version = 1.0
+
+ext {
+    javaMainClass = 'ru.keyboard.Application'
+}
+
+application {
+    mainClassName = javaMainClass
+}

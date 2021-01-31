@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<keyboard name='posiflex' author='TANGOR' layout='assets/posiflex_kb6610-bg.png'
+          model='posiflex_kb6600'>
+    <description>There is keyboard descriptions....</description>
+    <keyposition>
+        <xmin>775</xmin>
+        <xmax>825</xmax>
+        <ymin>65</ymin>
+        <ymax>120</ymax>
+        <formx>798</formx>
+        <formy>320</formy>
+    </keyposition>
+    <buttons CountX='15' CountY='6'>
+        <main width='50' height='50' kbdAlphaNumeric='false'>
+
+            <button x='42' y='51' scanCode='0x001B001B'/>
+            <button x='42' y='104' scanCode='0x100310021'/>
+            <button x='42' y='157' scanCode='0x00510071'/>
+            <button x='42' y='210' scanCode='0x00410061'/>
+            <button x='42' y='263' scanCode='0x005A007A'/>
+            <button x='42' y='316' scanCode='0x007AFFFF'/>
+
+            <button x='95' y='51' scanCode='0x0070FFFF'/>
+            <button x='95' y='104' scanCode='0x100320040'/>
+            <button x='95' y='157' scanCode='0x00570077'/>
+            <button x='95' y='210' scanCode='0x00530073'/>
+            <button x='95' y='263' scanCode='0x00580078'/>
+            <button x='95' y='316' scanCode='0x007BFFFF'/>
+
+            <button x='148' y='51' scanCode='0x0071FFFF'/>
+            <button x='148' y='104' scanCode='0x100330023'/>
+            <button x='148' y='157' scanCode='0x00450065'/>
+            <button x='148' y='210' scanCode='0x00440064'/>
+            <button x='148' y='263' scanCode='0x00430063'/>
+            <button x='148' y='316' scanCode='0x0021FFFF'/>
+
+            <button x='201' y='51' scanCode='0x0072FFFF'/>
+            <button x='201' y='104' scanCode='0x100340024'/>
+            <button x='201' y='157' scanCode='0x00520072'/>
+            <button x='201' y='210' scanCode='0x00460066'/>
+            <button x='201' y='263' scanCode='0x00560076'/>
+            <button x='201' y='316' scanCode='0x0022FFFF'/>
+
+            <button x='254' y='51' scanCode='0x0073FFFF'/>
+            <button x='254' y='104' scanCode='0x100350025'/>
+            <button x='254' y='157' scanCode='0x00540074'/>
+            <button x='254' y='210' scanCode='0x00470067'/>
+            <button x='254' y='263' scanCode='0x00420062'/>
+            <button x='254' y='316' scanCode='0x0024FFFF'/>
+
+            <button x='307' y='51' scanCode='0x0074FFFF'/>
+            <button x='307' y='104' scanCode='0x10036005E'/>
+            <button x='307' y='157' scanCode='0x00590079'/>
+            <button x='307' y='210' scanCode='0x00480068'/>
+            <button x='307' y='263' scanCode='0x004E006E'/>
+            <button x='307' y='316' scanCode='0x00200020'/>
+
+            <button x='360' y='51' scanCode='0x0075FFFF'/>
+            <button x='360' y='104' scanCode='0x100370026'/>
+            <button x='360' y='157' scanCode='0x00550075'/>
+            <button x='360' y='210' scanCode='0x004A006A'/>
+            <button x='360' y='263' scanCode='0x004D006D'/>
+            <button x='360' y='316' scanCode='0x007F007F'/>
+
+            <button x='413' y='51' scanCode='0x0076FFFF'/>
+            <button x='413' y='104' scanCode='0x10038002A'/>
+            <button x='413' y='157' scanCode='0x00490069'/>
+            <button x='413' y='210' scanCode='0x004B006B'/>
+            <button x='413' y='263' scanCode='0x002C002C'/>
+            <button x='413' y='316' scanCode='0x100C0007E'/>
+
+            <button x='466' y='51' scanCode='0x0077FFFF'/>
+            <button x='466' y='104' scanCode='0x100390028'/>
+            <button x='466' y='157' scanCode='0x004F006F'/>
+            <button x='466' y='210' scanCode='0x004C006C'/>
+            <button x='466' y='263' scanCode='0x002E002E'/>
+            <button x='466' y='316' scanCode='0x0025FFFF'/>
+
+            <button x='519' y='51' scanCode='0x0078FFFF'/>
+            <button x='519' y='104' scanCode='0x100300029'/>
+            <button x='519' y='157' scanCode='0x00500070'/>
+            <button x='519' y='210' scanCode='0x003B003B'/>
+            <button x='519' y='263' scanCode='0x0026FFFF'/>
+            <button x='519' y='316' scanCode='0x0028FFFF'/>
+
+            <button x='572' y='51' scanCode='0x0079FFFF'/>
+            <button x='572' y='104' scanCode='0x005D005D'/>
+            <button x='572' y='157' scanCode='0x005B005B'/>
+            <button x='572' y='210' scanCode='0x00DE0027'/>
+            <button x='572' y='263' scanCode='0x002F002F'/>
+            <button x='572' y='316' scanCode='0x0027FFFF'/>
+
+            <button x='625' y='51' scanCode='0x00080008'/>
+            <button x='625' y='104' scanCode='0x005C005C'/>
+
+
+            <button x='625' y='157' width='50' height='50'
+                    kbdAlphaNumeric='true' scanCode='0x00370037' ch='7' style='Disabled_round'
+                    text='7'/>
+            <button x='625' y='210' width='50' height='50'
+                    kbdAlphaNumeric='true' scanCode='0x00340034' ch='4' style='Disabled_round'
+                    text='4'/>
+            <button x='625' y='263' width='50' height='50'
+                    kbdAlphaNumeric='true' scanCode='0x00310031' ch='1' style='Disabled_round'
+                    text='1'/>
+            <button x='625' y='316' width='50' height='50'
+                    kbdAlphaNumeric='true' scanCode='0x00300030' ch='0' style='Disabled_round'
+                    text='0'/>
+
+
+            <button x='678' y='157' width='50' height='50'
+                    kbdAlphaNumeric='true' scanCode='0x00380038' ch='8' style='Disabled_round'
+                    text='8'/>
+            <button x='678' y='210' width='50' height='50'
+                    kbdAlphaNumeric='true' scanCode='0x00350035' ch='5' style='Disabled_round'
+                    text='5'/>
+            <button x='678' y='263' width='50' height='50'
+                    kbdAlphaNumeric='true' scanCode='0x00320032' ch='2' style='Disabled_round'
+                    text='2'/>
+            <button x='678' y='316' width='50' height='50'
+                    kbdAlphaNumeric='true' scanCode='0x0023FFFF' ch='00' style='Disabled_round'
+                    text='00'/>
+
+
+            <button x='731' y='157' width='50' height='50'
+                    kbdAlphaNumeric='true' scanCode='0x00390039' ch='9' style='Disabled_round'
+                    text='9'/>
+            <button x='731' y='210' width='50' height='50'
+                    kbdAlphaNumeric='true' scanCode='0x00360036' ch='6' style='Disabled_round'
+                    text='6'/>
+            <button x='731' y='263' width='50' height='50'
+                    kbdAlphaNumeric='true' scanCode='0x00330033' ch='3' style='Disabled_round'
+                    text='3'/>
+            <button x='731' y='316' width='50' height='50'
+                    kbdAlphaNumeric='true' scanCode='0x009BFFFF' ch=',' style='Disabled_round'
+                    text=','/>
+
+
+            <button x='784' y='157' scanCode='0x006D002D'/>
+            <button x='784' y='210' scanCode='0x006B002B'/>
+            <button x='784' y='263' scanCode='0x003D003D'/>
+            <button x='784' y='316' scanCode='0x000A000A'/>
+
+
+        </main>
+        <template maxCount='10'>
+            <button width='50' height='50' maxCount='5' id='1' pazzle='1'/>
+            <button width='50' height='103' maxCount='3' id='2' pazzle='2'/>
+            <button width='103' height='50' maxCount='3' id='3' pazzle='2'/>
+        </template>
+    </buttons>
+
+</keyboard>
