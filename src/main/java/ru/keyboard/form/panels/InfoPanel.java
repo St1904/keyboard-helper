@@ -20,11 +20,9 @@ public class InfoPanel extends JPanel {
 
     private final ActionListener actionListener;
     private final Map<Field, JTextField> textFields = new EnumMap<>(Field.class);
-    private final KeyListener keyListener;
 
-    public InfoPanel(ActionListener actionListener, KeyListener keyListener) {
+    public InfoPanel(ActionListener actionListener) {
         this.actionListener = actionListener;
-        this.keyListener = keyListener;
         setLayout(null);
 
         addLabelAndTextField("MODEL_NAME", "MODEL_NAME_EXAMPLE", 0, 200, PROVIDER);
@@ -93,7 +91,7 @@ public class InfoPanel extends JPanel {
 
     private int getFieldInt(Field field) {
         String s = textFields.get(field).getText();
-        if (s == null || s.isBlank()) {
+        if (s == null || s.isEmpty()) {
             return 0;
         }
         return Integer.parseInt(s);

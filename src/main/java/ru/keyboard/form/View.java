@@ -31,7 +31,7 @@ public class View implements ActionListener {
     // TODO нужно как-то умнее переключаться между окнами
     // TODO например, в модели меняется State, view слушает это событие и рисует нужную панельку
     public void drawInfoPanel() {
-        infoPanel = new InfoPanel(this, controller.getKeyListener());
+        infoPanel = new InfoPanel(this);
         mainFrame.setContentPane(infoPanel);
         mainFrame.revalidate();
     }

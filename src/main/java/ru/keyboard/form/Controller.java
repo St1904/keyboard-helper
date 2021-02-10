@@ -6,6 +6,7 @@ import ru.keyboard.listeners.KeyboardListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -116,7 +117,7 @@ public class Controller {
                 return;
             }
             Files.createFile(mapFile);
-            Files.writeString(mapFile, result);
+            Files.write(mapFile, result.getBytes(StandardCharsets.UTF_8));
         }
         catch (IOException e) {
             e.printStackTrace();
