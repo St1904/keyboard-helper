@@ -13,7 +13,6 @@ import java.util.logging.Logger;
  */
 public class KeyboardListener implements KeyListener {
 
-
     private static final Logger LOG = Logger.getLogger(KeyboardListener.class.getName());
 
     private final Queue<KeyEvent> keysQueue;

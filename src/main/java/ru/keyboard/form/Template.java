@@ -23,7 +23,6 @@ public class Template {
         return this;
     }
 
-    // TODO добавить поле с layout
     public Template appendLayout(String layout) {
         sb.append(" layout='").append(layout).append("'");
         return this;

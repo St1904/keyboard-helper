@@ -46,13 +46,8 @@ public class View implements ActionListener {
 //        mainFrame.requestFocus();
     }
 
-    // TODO очень длинная цепочка: KeysResolver -> Controller -> View -> Panel
-    public void moveTo(Direction dir) {
-        keyboardPanel.moveTo(dir);
-    }
-
-    public void moveTo(int nextX, int nextY) {
-        keyboardPanel.moveTo(nextX, nextY);
+    public void moveTo(int prevX, int prevY, int nextX, int nextY) {
+        keyboardPanel.moveTo(prevX, prevY, nextX, nextY);
     }
 
     @Override

@@ -10,15 +10,8 @@ import java.awt.*;
 public class KeyboardPanel extends JPanel {
 
     private final JPanel[][] panels;
-    private int curX = 0;
-    private int curY = 0;
-    private int rows;
-    private int columns;
 
     public KeyboardPanel(int rows, int columns) {
-        this.rows = rows;
-        this.columns = columns;
-
         setLayout(new GridLayout(rows, columns, 1, 1));
 
         panels = new JPanel[columns][rows];
@@ -45,19 +38,8 @@ public class KeyboardPanel extends JPanel {
         panels[0][0].setBackground(Color.GREEN);
     }
 
-    public void moveTo(Direction dir) {
-        int nextX = curX + dir.getDx();
-        int nextY = curY + dir.getDy();
-        moveTo(nextX, nextY);
-    }
-
-    public void moveTo(int nextX, int nextY) {
-        if (0 <= nextX && nextX < columns
-                && 0 <= nextY && nextY < rows) {
-            panels[curX][curY].setBackground(Color.DARK_GRAY);
-            curX = nextX;
-            curY = nextY;
-            panels[curX][curY].setBackground(Color.GREEN);
-        }
+    public void moveTo(int prevX, int prevY, int nextX, int nextY) {
+        panels[prevX][prevY].setBackground(Color.DARK_GRAY);
+        panels[nextX][nextY].setBackground(Color.GREEN);
     }
 }

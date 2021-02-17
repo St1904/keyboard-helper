@@ -27,15 +27,16 @@ public class InfoPanel extends JPanel {
 
         addLabelAndTextField("MODEL_NAME", "MODEL_NAME_EXAMPLE", 0, 200, PROVIDER);
         addLabelAndTextField("MODEL_READABLE", "MODEL_READABLE_EXAMPLE", 1, 200, READABLE_NAME);
+        addLabelAndTextField("LAYOUT", "LAYOUT_EXAMPLE", 2, 200, LAYOUT);
 
-        addLabelAndTextField("KEYS_ROWS", "KEYS_ROWS_EXAMPLE", 3, 25, ROWS_NUM);
-        addLabelAndTextField("KEYS_COLUMNS", "KEYS_COLUMNS_EXAMPLE", 4, 25, COLS_NUM);
+        addLabelAndTextField("KEYS_ROWS", "KEYS_ROWS_EXAMPLE", 4, 25, ROWS_NUM);
+        addLabelAndTextField("KEYS_COLUMNS", "KEYS_COLUMNS_EXAMPLE", 5, 25, COLS_NUM);
 
-        addLabelAndTextField("KEYS_WIDTH", null, 6, 25, KEY_WIDTH_PX);
-        addLabelAndTextField("KEYS_HEIGHT", null, 7, 25, KEY_HEIGHT_PX);
-        addLabelAndTextField("KEYS_DISTANCE", null, 8, 25, KEY_DIST_PX);
-        addLabelAndTextField("KEYS_X_START", null, 9, 25, X_START_PX);
-        addLabelAndTextField("KEYS_Y_START", null, 10, 25, Y_START_PX);
+        addLabelAndTextField("KEYS_WIDTH", null, 7, 25, KEY_WIDTH_PX);
+        addLabelAndTextField("KEYS_HEIGHT", null, 8, 25, KEY_HEIGHT_PX);
+        addLabelAndTextField("KEYS_DISTANCE", null, 9, 25, KEY_DIST_PX);
+        addLabelAndTextField("KEYS_X_START", null, 10, 25, X_START_PX);
+        addLabelAndTextField("KEYS_Y_START", null, 11, 25, Y_START_PX);
 
         addAcceptButton();
     }
@@ -76,6 +77,7 @@ public class InfoPanel extends JPanel {
     public void updateModel(Model model) {
         model.setProviderName(getFieldText(PROVIDER));
         model.setKeyboardReadableName(getFieldText(READABLE_NAME));
+        model.setLayout(getFieldText(LAYOUT));
         model.setRows(getFieldInt(ROWS_NUM));
         model.setColumns(getFieldInt(COLS_NUM));
         model.setKeyWidthPx(getFieldInt(KEY_WIDTH_PX));

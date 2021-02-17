@@ -8,6 +8,7 @@ public enum Field {
 
     PROVIDER,
     READABLE_NAME,
+    LAYOUT,
     ROWS_NUM,
     COLS_NUM,
     KEY_WIDTH_PX,

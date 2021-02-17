@@ -8,6 +8,7 @@ public class Model {
 
     private String providerName;
     private String keyboardReadableName;
+    private String layout;
 
     private int rows;
     private int columns;
@@ -35,6 +36,14 @@ public class Model {
 
     public void setKeyboardReadableName(String keyboardReadableName) {
         this.keyboardReadableName = keyboardReadableName;
+    }
+
+    public String getLayout() {
+        return layout;
+    }
+
+    public void setLayout(String layout) {
+        this.layout = layout;
     }
 
     public int getRows() {

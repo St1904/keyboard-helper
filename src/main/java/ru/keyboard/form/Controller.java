@@ -10,7 +10,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashSet;
 import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
@@ -55,6 +57,9 @@ public class Controller {
         // записали сканкод текущей клавиши
         model.getScanCodes()[curX][curY] = getScanCodeStr(event);
 
+        // записали последнее положение
+        int prevX = curX;
+        int prevY = curY;
         // определили, куда переходим дальше
         int nextY = curY + 1;
         if (0 < nextY && nextY < model.getRows()) {
@@ -72,22 +77,52 @@ public class Controller {
         }
 
         // отрисовали перемещение
-        view.moveTo(curX, curY);
+        view.moveTo(prevX, prevY, curX, curY);
     }
 
     public void moveTo(Direction dir) {
-        // только отрисовали перемещение - сканкод не сохраняется
-        view.moveTo(dir);
+        int nextX = curX + dir.getDx();
+        int nextY = curY + dir.getDy();
+        if (0 <= nextX && nextX < model.getColumns()
+                && 0 <= nextY && nextY < model.getRows()) {
+            view.moveTo(curX, curY, nextX, nextY);
+            curX = nextX;
+            curY = nextY;
+        }
     }
 
     // получен сигнал завершения
     public void stop() {
+        checkDuplicates();
         // TODO сформировать мапу, завершить потоки, закрыть окно
+        String mapContent = createMapContent();
+        System.out.println(mapContent);
+
+        writeMapFile(mapContent);
+    }
+
+    private void checkDuplicates() {
+        String[][] scanCodes = model.getScanCodes();
+        Set<String> uniqueScanCodes = new HashSet<>();
+        for (int i = 0; i < scanCodes.length; i++) {
+            String[] scanCodeColumn = scanCodes[i];
+            for (int j = 0; j < scanCodeColumn.length; j++) {
+                String s = scanCodeColumn[j];
+                if (uniqueScanCodes.contains(s)) {
+                    System.out.println("DUPLICATE SCAN CODE " + s + " строка = " + (j + 1) + ", колонка = " + (i + 1));
+                }
+                uniqueScanCodes.add(s);
+            }
+        }
+    }
+
+    private String createMapContent() {
         // создали шапку
         Template template = new Template()
                 .startDescription()
-                // TODO это не совсе оно же? + забыла layout
+                // TODO это не совсе оно же?
                 .appendName(model.getKeyboardReadableName())
+                .appendLayout(model.getLayout())
                 .appendModel(model.getProviderName())
                 .endDescription()
                 .startButtonsBlock(model.getRows(), model.getColumns(), model.getKeyWidthPx(), model.getKeyHeightPx());
@@ -106,9 +141,10 @@ public class Controller {
         }
         template.addEnd();
 
-        String result = template.getResult();
-        System.out.println(result);
+        return template.getResult();
+    }
 
+    private void writeMapFile(String mapContent) {
         String mapFileName = model.getProviderName() + "-map.xml";
         Path mapFile = MAP_FILE_DIRECTORY.resolve(mapFileName);
         try {
@@ -117,7 +153,7 @@ public class Controller {
                 return;
             }
             Files.createFile(mapFile);
-            Files.write(mapFile, result.getBytes(StandardCharsets.UTF_8));
+            Files.write(mapFile, mapContent.getBytes(StandardCharsets.UTF_8));
         }
         catch (IOException e) {
             e.printStackTrace();
