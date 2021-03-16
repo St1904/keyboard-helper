@@ -14,3 +14,12 @@ ext {
 application {
     mainClassName = javaMainClass
 }
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+    implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.2.4'
+}

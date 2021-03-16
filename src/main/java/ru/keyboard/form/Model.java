@@ -1,14 +1,20 @@
 package ru.keyboard.form;
 
+import java.nio.file.Path;
+
 /**
  * @author Sokolova
  * @since 23.01.2021
  */
 public class Model {
 
+    private Path oldMapFile;
+
     private String providerName;
     private String keyboardReadableName;
     private String layout;
+    
+    private boolean isVirtualMap;
 
     private int rows;
     private int columns;
@@ -21,6 +27,14 @@ public class Model {
     private int yStartPx;
 
     private String[][] scanCodes;
+
+    public Path getOldMapFile() {
+        return oldMapFile;
+    }
+
+    public void setOldMapFile(Path oldMapFile) {
+        this.oldMapFile = oldMapFile;
+    }
 
     public String getProviderName() {
         return providerName;
@@ -44,6 +58,14 @@ public class Model {
 
     public void setLayout(String layout) {
         this.layout = layout;
+    }
+
+    public boolean isVirtualMap() {
+        return isVirtualMap;
+    }
+
+    public void setIsVirtualMap(boolean virtualMap) {
+        isVirtualMap = virtualMap;
     }
 
     public int getRows() {

@@ -1,16 +1,24 @@
 package ru.keyboard.form;
 
+import javafx.util.Pair;
+import ru.keyboard.form.jaxb.KeyboardMap;
+import ru.keyboard.form.jaxb.XmlButton;
 import ru.keyboard.form.panels.Direction;
 import ru.keyboard.listeners.KeyboardListener;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -22,6 +30,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class Controller {
 
     private static final Path MAP_FILE_DIRECTORY = Paths.get("D:\\temp");
+    private static final String MAP_FILE_ENDING = "-map.xml";
+    private static final String VIRT_MAP_SEPARATOR = ",";
 
     private final Model model;
     private final View view;
@@ -32,20 +42,53 @@ public class Controller {
     private int curX;
     private int curY;
 
-    public Controller(Model model) {
+    private final String mapsDirectory;
+    private Path oldMapFile;
+
+    public Controller(Model model, String mapsDirectory) {
         this.model = model;
         this.keysQueue = new LinkedBlockingQueue<>();
         // TODO нужно решать какой листенер нам нужен (например через проперти или в рантайме)
         keyListener = new KeyboardListener(keysQueue);
         view = new View(model, this);
         view.drawInfoPanel();
+        this.mapsDirectory = mapsDirectory;
 //        view.addKeyListener(keyListener);
     }
 
     public void accept() {
+        if (!validateModel()) {
+            return;
+        }
         view.drawKeyboardView();
         model.setScanCodes(new String[model.getColumns()][model.getRows()]);
         startKeysResolver();
+    }
+
+    private boolean validateModel() {
+        oldMapFile = getProviderMapFile();
+        if (model.isVirtualMap() && oldMapFile == null) {
+            System.out.println("Cannot find map file in directory: " + mapsDirectory);
+            System.out.println("Check application argument '-map-dir'");
+            return false;
+        }
+        // TODO а другие поля?
+        return true;
+    }
+
+    private Path getProviderMapFile() {
+        if (mapsDirectory == null) {
+            return null;
+        }
+        Path mapsDirPath = Paths.get(mapsDirectory);
+        if (Files.notExists(mapsDirPath) || !Files.isDirectory(mapsDirPath)) {
+            return null;
+        }
+        Path mapFile = mapsDirPath.resolve(model.getProviderName() + MAP_FILE_ENDING);
+        if (Files.notExists(mapFile) || !Files.isRegularFile(mapFile)) {
+            return null;
+        }
+        return mapFile;
     }
 
     public void startKeysResolver() {
@@ -91,14 +134,22 @@ public class Controller {
         }
     }
 
+    // TODO завершить потоки, закрыть окно
     // получен сигнал завершения
     public void stop() {
         checkDuplicates();
-        // TODO сформировать мапу, завершить потоки, закрыть окно
-        String mapContent = createMapContent();
-        System.out.println(mapContent);
-
-        writeMapFile(mapContent);
+        if (model.isVirtualMap()) {
+            // создание virtual-map файла на основе существующего с таким же именем
+            String virtMap = createVirtualMap();
+            System.out.println(virtMap);
+            // TODO implement
+//            writeVirtMapFile(virtMap);
+        } else {
+            // создание нового map файла
+            String mapContent = createMapContent();
+            System.out.println(mapContent);
+            writeMapFile(mapContent);
+        }
     }
 
     private void checkDuplicates() {
@@ -108,7 +159,7 @@ public class Controller {
             String[] scanCodeColumn = scanCodes[i];
             for (int j = 0; j < scanCodeColumn.length; j++) {
                 String s = scanCodeColumn[j];
-                if (uniqueScanCodes.contains(s)) {
+                if (s != null && uniqueScanCodes.contains(s)) {
                     System.out.println("DUPLICATE SCAN CODE " + s + " строка = " + (j + 1) + ", колонка = " + (i + 1));
                 }
                 uniqueScanCodes.add(s);
@@ -116,9 +167,50 @@ public class Controller {
         }
     }
 
+    private String createVirtualMap() {
+        StringBuilder sb = new StringBuilder();
+        Map<Pair<String, String>, String> oldScanCodes = getOldScancodes();
+        String[][] scanCodes = model.getScanCodes();
+        int x = model.getXStartPx();
+        int y = model.getYStartPx();
+        for (String[] scanCodeColumn : scanCodes) {
+            for (String s : scanCodeColumn) {
+                String oldScanCode = oldScanCodes.get(new Pair<>(String.valueOf(x), String.valueOf(y)));
+                if (oldScanCode == null) {
+                    System.out.println("ERROR! Old scan code not found (x: " + x + ", y: " + y + ")");
+                } else {
+                    sb.append(s).append(VIRT_MAP_SEPARATOR).append(oldScanCode).append("\n");
+                }
+                y += model.getKeyHeightPx() + model.getKeyDistancePx();
+            }
+            x += model.getKeyWidthPx() + model.getKeyDistancePx();
+            y = model.getYStartPx();
+        }
+
+        return sb.toString();
+    }
+
+    private Map<Pair<String, String>, String> getOldScancodes() {
+        Map<Pair<String, String>, String> result = new HashMap<>();
+        try (FileReader mapFileReader = new FileReader(oldMapFile.toFile())) {
+            JAXBContext context = JAXBContext.newInstance(KeyboardMap.class);
+            KeyboardMap keyboardMap = (KeyboardMap) context.createUnmarshaller().unmarshal(mapFileReader);
+            for (XmlButton button : keyboardMap.getButtons().getButtons()) {
+                result.put(new Pair<>(button.getX(), button.getY()), button.getScanCode());
+            }
+        } catch (JAXBException e) {
+            System.out.println("Problem with JAXB");
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("Problem with FileReader");
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     private String createMapContent() {
         // создали шапку
-        Template template = new Template()
+        MapTemplater mapTemplater = new MapTemplater()
                 .startDescription()
                 // TODO это не совсе оно же?
                 .appendName(model.getKeyboardReadableName())
@@ -132,20 +224,21 @@ public class Controller {
         // заполняем кнопочки
         for (String[] scanCodeColumn : scanCodes) {
             for (String s : scanCodeColumn) {
-                template.addButton(x, y, s);
+                mapTemplater.addButton(x, y, s);
                 y += model.getKeyHeightPx() + model.getKeyDistancePx();
             }
-            template.addEmptyLine();
+            mapTemplater.addEmptyLine();
             x += model.getKeyWidthPx() + model.getKeyDistancePx();
             y = model.getYStartPx();
         }
-        template.addEnd();
+        // TODO не добавлен блок "template" в конце
+        mapTemplater.addEnd();
 
-        return template.getResult();
+        return mapTemplater.getResult();
     }
 
     private void writeMapFile(String mapContent) {
-        String mapFileName = model.getProviderName() + "-map.xml";
+        String mapFileName = model.getProviderName() + MAP_FILE_ENDING;
         Path mapFile = MAP_FILE_DIRECTORY.resolve(mapFileName);
         try {
             if (Files.exists(mapFile)) {

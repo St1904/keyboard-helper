@@ -6,7 +6,6 @@ import ru.keyboard.form.ResBundle;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyListener;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -20,6 +19,7 @@ public class InfoPanel extends JPanel {
 
     private final ActionListener actionListener;
     private final Map<Field, JTextField> textFields = new EnumMap<>(Field.class);
+    private JCheckBox isVirtualMap;
 
     public InfoPanel(ActionListener actionListener) {
         this.actionListener = actionListener;
@@ -28,15 +28,16 @@ public class InfoPanel extends JPanel {
         addLabelAndTextField("MODEL_NAME", "MODEL_NAME_EXAMPLE", 0, 200, PROVIDER);
         addLabelAndTextField("MODEL_READABLE", "MODEL_READABLE_EXAMPLE", 1, 200, READABLE_NAME);
         addLabelAndTextField("LAYOUT", "LAYOUT_EXAMPLE", 2, 200, LAYOUT);
+        addSwitch();
 
-        addLabelAndTextField("KEYS_ROWS", "KEYS_ROWS_EXAMPLE", 4, 25, ROWS_NUM);
-        addLabelAndTextField("KEYS_COLUMNS", "KEYS_COLUMNS_EXAMPLE", 5, 25, COLS_NUM);
+        addLabelAndTextField("KEYS_ROWS", "KEYS_ROWS_EXAMPLE", 5, 25, ROWS_NUM);
+        addLabelAndTextField("KEYS_COLUMNS", "KEYS_COLUMNS_EXAMPLE", 6, 25, COLS_NUM);
 
-        addLabelAndTextField("KEYS_WIDTH", null, 7, 25, KEY_WIDTH_PX);
-        addLabelAndTextField("KEYS_HEIGHT", null, 8, 25, KEY_HEIGHT_PX);
-        addLabelAndTextField("KEYS_DISTANCE", null, 9, 25, KEY_DIST_PX);
-        addLabelAndTextField("KEYS_X_START", null, 10, 25, X_START_PX);
-        addLabelAndTextField("KEYS_Y_START", null, 11, 25, Y_START_PX);
+        addLabelAndTextField("KEYS_WIDTH", null, 8, 25, KEY_WIDTH_PX);
+        addLabelAndTextField("KEYS_HEIGHT", null, 9, 25, KEY_HEIGHT_PX);
+        addLabelAndTextField("KEYS_DISTANCE", null, 10, 25, KEY_DIST_PX);
+        addLabelAndTextField("KEYS_X_START", null, 11, 25, X_START_PX);
+        addLabelAndTextField("KEYS_Y_START", null, 12, 25, Y_START_PX);
 
         addAcceptButton();
     }
@@ -65,6 +66,13 @@ public class InfoPanel extends JPanel {
         add(example);
     }
 
+    private void addSwitch() {
+        isVirtualMap = new JCheckBox();
+        isVirtualMap.setText(ResBundle.getString("VIRTUAL_MAP"));
+        isVirtualMap.setBounds(20, 95, 200, 25);
+        add(isVirtualMap);
+    }
+
     private void addAcceptButton() {
         JButton button = new JButton();
         button.setBounds(600, 500, 150, 30);
@@ -78,6 +86,7 @@ public class InfoPanel extends JPanel {
         model.setProviderName(getFieldText(PROVIDER));
         model.setKeyboardReadableName(getFieldText(READABLE_NAME));
         model.setLayout(getFieldText(LAYOUT));
+        model.setIsVirtualMap(isVirtualMap.isSelected());
         model.setRows(getFieldInt(ROWS_NUM));
         model.setColumns(getFieldInt(COLS_NUM));
         model.setKeyWidthPx(getFieldInt(KEY_WIDTH_PX));

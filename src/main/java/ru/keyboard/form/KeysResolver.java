@@ -16,7 +16,6 @@ public class KeysResolver extends Thread {
 
     private static final Logger LOG = Logger.getLogger(KeysResolver.class.getName());
 
-    private static final TimeUnit TIME = TimeUnit.MILLISECONDS;
     private static final int TIMEOUT = 20;
 
     private volatile AtomicBoolean isStopped = new AtomicBoolean(true);
@@ -40,7 +39,7 @@ public class KeysResolver extends Thread {
 
                     resolve(event);
                 }
-                TIME.sleep(TIMEOUT);
+                TimeUnit.MILLISECONDS.sleep(TIMEOUT);
             }
         } catch (InterruptedException e) {
             e.printStackTrace();

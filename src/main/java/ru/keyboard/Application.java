@@ -9,12 +9,20 @@ import ru.keyboard.form.Model;
  */
 public class Application {
 
+    private static final String mapsDirArg = "-map-dir=";
+
     public static void main(String[] args) {
-        new Application().run();
+        String mapsDirectory = null;
+        for (String arg : args) {
+            if (arg.startsWith(mapsDirArg)) {
+                mapsDirectory = arg.substring(mapsDirArg.length());
+            }
+        }
+        new Application().run(mapsDirectory);
     }
 
-    private void run() {
+    private void run(String mapsDirectory) {
         Model model = new Model();
-        Controller controller = new Controller(model);
+        Controller controller = new Controller(model, mapsDirectory);
     }
 }
