@@ -1,17 +1,20 @@
-package ru.keyboard.form.jaxb;
+package ru.keyboard.form.jaxb.map;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
+/**
+ * Основные кнопки map файла
+ */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class XmlButton {
 
     @XmlAttribute(name = "x")
-    private String x;
+    private int x;
 
     @XmlAttribute(name = "y")
-    private String y;
+    private int y;
 
     @XmlAttribute(name = "scanCode")
     private String scanCode;
@@ -19,19 +22,19 @@ public class XmlButton {
     public XmlButton() {
     }
 
-    public String getX() {
+    public int getX() {
         return x;
     }
 
-    public void setX(String x) {
+    public void setX(int x) {
         this.x = x;
     }
 
-    public String getY() {
+    public int getY() {
         return y;
     }
 
-    public void setY(String y) {
+    public void setY(int y) {
         this.y = y;
     }
 

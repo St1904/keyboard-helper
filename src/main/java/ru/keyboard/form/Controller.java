@@ -1,8 +1,8 @@
 package ru.keyboard.form;
 
 import javafx.util.Pair;
-import ru.keyboard.form.jaxb.KeyboardMap;
-import ru.keyboard.form.jaxb.XmlButton;
+import ru.keyboard.form.jaxb.map.KeyboardMap;
+import ru.keyboard.form.jaxb.map.XmlButton;
 import ru.keyboard.form.panels.Direction;
 import ru.keyboard.listeners.KeyboardListener;
 
@@ -12,7 +12,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,7 +28,6 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class Controller {
 
-    private static final Path MAP_FILE_DIRECTORY = Paths.get("D:\\temp");
     private static final String MAP_FILE_ENDING = "-map.xml";
     private static final String VIRT_MAP_SEPARATOR = ",";
 
@@ -53,7 +51,6 @@ public class Controller {
         view = new View(model, this);
         view.drawInfoPanel();
         this.mapsDirectory = mapsDirectory;
-//        view.addKeyListener(keyListener);
     }
 
     public void accept() {
@@ -114,8 +111,6 @@ public class Controller {
             if (0 <= nextY && nextX < model.getColumns()) {
                 curX = nextX;
                 curY = 0;
-            } else {
-                // TODO некуда переходить - надо что-то делать с этим
             }
         }
 
@@ -146,9 +141,7 @@ public class Controller {
 //            writeVirtMapFile(virtMap);
         } else {
             // создание нового map файла
-            String mapContent = createMapContent();
-            System.out.println(mapContent);
-            writeMapFile(mapContent);
+            MapWriter.createMapFile(model);
         }
     }
 
@@ -169,13 +162,13 @@ public class Controller {
 
     private String createVirtualMap() {
         StringBuilder sb = new StringBuilder();
-        Map<Pair<String, String>, String> oldScanCodes = getOldScancodes();
+        Map<Pair<Integer, Integer>, String> oldScanCodes = getOldScancodes();
         String[][] scanCodes = model.getScanCodes();
         int x = model.getXStartPx();
         int y = model.getYStartPx();
         for (String[] scanCodeColumn : scanCodes) {
             for (String s : scanCodeColumn) {
-                String oldScanCode = oldScanCodes.get(new Pair<>(String.valueOf(x), String.valueOf(y)));
+                String oldScanCode = oldScanCodes.get(new Pair<>(x, y));
                 if (oldScanCode == null) {
                     System.out.println("ERROR! Old scan code not found (x: " + x + ", y: " + y + ")");
                 } else {
@@ -190,12 +183,12 @@ public class Controller {
         return sb.toString();
     }
 
-    private Map<Pair<String, String>, String> getOldScancodes() {
-        Map<Pair<String, String>, String> result = new HashMap<>();
+    private Map<Pair<Integer, Integer>, String> getOldScancodes() {
+        Map<Pair<Integer, Integer>, String> result = new HashMap<>();
         try (FileReader mapFileReader = new FileReader(oldMapFile.toFile())) {
             JAXBContext context = JAXBContext.newInstance(KeyboardMap.class);
             KeyboardMap keyboardMap = (KeyboardMap) context.createUnmarshaller().unmarshal(mapFileReader);
-            for (XmlButton button : keyboardMap.getButtons().getButtons()) {
+            for (XmlButton button : keyboardMap.getButtons().getMain().getButtons()) {
                 result.put(new Pair<>(button.getX(), button.getY()), button.getScanCode());
             }
         } catch (JAXBException e) {
@@ -206,51 +199,6 @@ public class Controller {
             e.printStackTrace();
         }
         return result;
-    }
-
-    private String createMapContent() {
-        // создали шапку
-        MapTemplater mapTemplater = new MapTemplater()
-                .startDescription()
-                // TODO это не совсе оно же?
-                .appendName(model.getKeyboardReadableName())
-                .appendLayout(model.getLayout())
-                .appendModel(model.getProviderName())
-                .endDescription()
-                .startButtonsBlock(model.getRows(), model.getColumns(), model.getKeyWidthPx(), model.getKeyHeightPx());
-        String[][] scanCodes = model.getScanCodes();
-        int x = model.getXStartPx();
-        int y = model.getYStartPx();
-        // заполняем кнопочки
-        for (String[] scanCodeColumn : scanCodes) {
-            for (String s : scanCodeColumn) {
-                mapTemplater.addButton(x, y, s);
-                y += model.getKeyHeightPx() + model.getKeyDistancePx();
-            }
-            mapTemplater.addEmptyLine();
-            x += model.getKeyWidthPx() + model.getKeyDistancePx();
-            y = model.getYStartPx();
-        }
-        // TODO не добавлен блок "template" в конце
-        mapTemplater.addEnd();
-
-        return mapTemplater.getResult();
-    }
-
-    private void writeMapFile(String mapContent) {
-        String mapFileName = model.getProviderName() + MAP_FILE_ENDING;
-        Path mapFile = MAP_FILE_DIRECTORY.resolve(mapFileName);
-        try {
-            if (Files.exists(mapFile)) {
-                System.out.println("MAP FILE " + mapFileName + " ALREADY EXISTS!");
-                return;
-            }
-            Files.createFile(mapFile);
-            Files.write(mapFile, mapContent.getBytes(StandardCharsets.UTF_8));
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public String getScanCodeStr(KeyEvent event) {
