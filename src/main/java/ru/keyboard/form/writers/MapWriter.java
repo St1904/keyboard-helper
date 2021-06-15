@@ -1,12 +1,12 @@
-package ru.keyboard.form;
+package ru.keyboard.form.writers;
 
-import ru.keyboard.form.jaxb.map.KeyboardMap;
+import ru.keyboard.form.Model;
+import ru.keyboard.form.jaxb.map.XmlMap;
 import ru.keyboard.form.jaxb.map.XmlButton;
 import ru.keyboard.form.jaxb.map.XmlButtonWrapper;
 import ru.keyboard.form.jaxb.map.XmlMainBlock;
 import ru.keyboard.form.jaxb.map.XmlTemplateButton;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import java.io.IOException;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Класс отвечает за формирование map файла
+ * Класс отвечает за формирование и сохранение map файла
  */
 public class MapWriter {
 
@@ -27,7 +27,7 @@ public class MapWriter {
     // TODO дублирует константу в Controller
     private static final String MAP_FILE_ENDING = "-map.xml";
 
-    static void createMapFile(Model model) {
+    public static void createMapFile(Model model) {
         try {
             String mapContent = MapWriter.createMapContent(model);
             System.out.println(mapContent);
@@ -39,19 +39,15 @@ public class MapWriter {
     }
 
     private static String createMapContent(Model model) throws JAXBException {
-        JAXBContext context = JAXBContext.newInstance(KeyboardMap.class);
-        Marshaller marshaller = context.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        // убирает первую строчку, там где encoding и standalone
-        marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
-        marshaller.setProperty("com.sun.xml.bind.xmlHeaders", "<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        Marshaller marshaller = Util.create(XmlMap.class);
         StringWriter sw = new StringWriter();
+        Util.addHeader(sw);
         marshaller.marshal(createKeyboardMapObject(model), sw);
         return sw.toString();
     }
 
-    private static KeyboardMap createKeyboardMapObject(Model model) {
-        KeyboardMap map = new KeyboardMap();
+    private static XmlMap createKeyboardMapObject(Model model) {
+        XmlMap map = new XmlMap();
         map.setName(model.getKeyboardReadableName());
         map.setLayout(model.getLayout());
         map.setModel(model.getProviderName());
@@ -138,9 +134,7 @@ public class MapWriter {
         String mapFileName = model.getProviderName() + MAP_FILE_ENDING;
         Path mapFile = MAP_FILE_DIRECTORY.resolve(mapFileName);
         try {
-            if (Files.exists(mapFile)) {
-                System.out.println("MAP FILE " + mapFileName + " ALREADY EXISTS! Will be overwritten.");
-            } else {
+            if (!Files.exists(mapFile)) {
                 Files.createFile(mapFile);
             }
             Files.write(mapFile, mapContent.getBytes(StandardCharsets.UTF_8));

@@ -1,9 +1,11 @@
 package ru.keyboard.form;
 
 import javafx.util.Pair;
-import ru.keyboard.form.jaxb.map.KeyboardMap;
+import ru.keyboard.form.jaxb.map.XmlMap;
 import ru.keyboard.form.jaxb.map.XmlButton;
 import ru.keyboard.form.panels.Direction;
+import ru.keyboard.form.writers.ConfigWriter;
+import ru.keyboard.form.writers.MapWriter;
 import ru.keyboard.listeners.KeyboardListener;
 
 import javax.xml.bind.JAXBContext;
@@ -140,8 +142,8 @@ public class Controller {
             // TODO implement
 //            writeVirtMapFile(virtMap);
         } else {
-            // создание нового map файла
             MapWriter.createMapFile(model);
+            ConfigWriter.createConfigFile(model);
         }
     }
 
@@ -186,9 +188,9 @@ public class Controller {
     private Map<Pair<Integer, Integer>, String> getOldScancodes() {
         Map<Pair<Integer, Integer>, String> result = new HashMap<>();
         try (FileReader mapFileReader = new FileReader(oldMapFile.toFile())) {
-            JAXBContext context = JAXBContext.newInstance(KeyboardMap.class);
-            KeyboardMap keyboardMap = (KeyboardMap) context.createUnmarshaller().unmarshal(mapFileReader);
-            for (XmlButton button : keyboardMap.getButtons().getMain().getButtons()) {
+            JAXBContext context = JAXBContext.newInstance(XmlMap.class);
+            XmlMap xmlMap = (XmlMap) context.createUnmarshaller().unmarshal(mapFileReader);
+            for (XmlButton button : xmlMap.getButtons().getMain().getButtons()) {
                 result.put(new Pair<>(button.getX(), button.getY()), button.getScanCode());
             }
         } catch (JAXBException e) {

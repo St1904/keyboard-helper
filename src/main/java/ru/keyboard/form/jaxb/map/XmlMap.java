@@ -6,9 +6,12 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * Класс-сущность для xxx-map.xml
+ */
 @XmlRootElement(name = "keyboard")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class KeyboardMap {
+public class XmlMap {
 
     @XmlAttribute(name = "name")
     private String name;
@@ -22,7 +25,7 @@ public class KeyboardMap {
     @XmlElement(name = "buttons")
     private XmlButtonWrapper buttons;
 
-    public KeyboardMap() {
+    public XmlMap() {
     }
 
     public String getName() {
