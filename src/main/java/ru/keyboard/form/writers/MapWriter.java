@@ -9,23 +9,16 @@ import ru.keyboard.form.jaxb.map.XmlTemplateButton;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import java.io.IOException;
 import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+
+import static ru.keyboard.form.Constants.MAP_FILE_ENDING;
 
 /**
  * Класс отвечает за формирование и сохранение map файла
  */
 public class MapWriter {
-
-    private static final Path MAP_FILE_DIRECTORY = Paths.get("D:\\temp");
-    // TODO дублирует константу в Controller
-    private static final String MAP_FILE_ENDING = "-map.xml";
 
     public static void createMapFile(Model model) {
         try {
@@ -39,7 +32,7 @@ public class MapWriter {
     }
 
     private static String createMapContent(Model model) throws JAXBException {
-        Marshaller marshaller = Util.create(XmlMap.class);
+        Marshaller marshaller = Util.createMarshaller(XmlMap.class);
         StringWriter sw = new StringWriter();
         Util.addHeader(sw);
         marshaller.marshal(createKeyboardMapObject(model), sw);
@@ -132,15 +125,6 @@ public class MapWriter {
 
     private static void writeMapFile(Model model, String mapContent) {
         String mapFileName = model.getProviderName() + MAP_FILE_ENDING;
-        Path mapFile = MAP_FILE_DIRECTORY.resolve(mapFileName);
-        try {
-            if (!Files.exists(mapFile)) {
-                Files.createFile(mapFile);
-            }
-            Files.write(mapFile, mapContent.getBytes(StandardCharsets.UTF_8));
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        Util.writeFile(mapFileName, mapContent);
     }
 }

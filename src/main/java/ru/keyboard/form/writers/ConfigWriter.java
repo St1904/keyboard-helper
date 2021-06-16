@@ -6,25 +6,18 @@ import ru.keyboard.form.jaxb.config.XmlProperty;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import java.io.IOException;
 import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static ru.keyboard.form.Constants.CONFIG_FILE_ENDING;
+import static ru.keyboard.form.Constants.CONFIG_FILE_PREFIX;
 
 /**
  * Класс отвечает за формирование и сохранение config файла (заглушки для дальнейшего наполнения вручную)
  */
 public class ConfigWriter {
-
-    // TODO в общие константы куда-нибудь вынести - и переименовать
-    private static final Path MAP_FILE_DIRECTORY = Paths.get("D:\\temp");
-    private static final String CONFIG_FILE_PREFIX = "keyboard-";
-    private static final String CONFIG_FILE_ENDING = "-config.xml";
 
     public static void createConfigFile(Model model) {
         try {
@@ -38,7 +31,7 @@ public class ConfigWriter {
     }
 
     private static String createConfigContent(Model model) throws JAXBException {
-        Marshaller marshaller = Util.create(XmlConfig.class);
+        Marshaller marshaller = Util.createMarshaller(XmlConfig.class);
         StringWriter sw = new StringWriter();
         Util.addHeader(sw);
         marshaller.marshal(createConfigObject(model), sw);
@@ -87,16 +80,7 @@ public class ConfigWriter {
     }
     
     private static void writeConfigFile(Model model, String configContent) {
-        String mapFileName = CONFIG_FILE_PREFIX + model.getProviderName() + CONFIG_FILE_ENDING;
-        Path mapFile = MAP_FILE_DIRECTORY.resolve(mapFileName);
-        try {
-            if (!Files.exists(mapFile)) {
-                Files.createFile(mapFile);
-            }
-            Files.write(mapFile, configContent.getBytes(StandardCharsets.UTF_8));
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        String configFileName = CONFIG_FILE_PREFIX + model.getProviderName() + CONFIG_FILE_ENDING;
+        Util.writeFile(configFileName, configContent);
     }
 }
