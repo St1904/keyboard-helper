@@ -1,5 +1,7 @@
 package ru.keyboard.form.jaxb.map;
 
+import ru.keyboard.form.jaxb.XmlRoot;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -11,7 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name = "keyboard")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class XmlMap {
+public class XmlMap implements XmlRoot {
 
     @XmlAttribute(name = "name")
     private String name;

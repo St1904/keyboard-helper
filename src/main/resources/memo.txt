@@ -1,0 +1,6 @@
+xxx-map.xml                 -> SetRetail10_Server\Installation\set10_conf\standalone\configuration\modules\equipment
+xxx-kbd.xml                 -> SetRetail10_Server\Installation\set10_conf\standalone\configuration\modules\equipment
+serverEquipment-config.xml  -> SetRetail10_Server\Installation\set10_conf\standalone\configuration\modules\equipment
+keyboard-xxx-0-kbd.xml      -> SetRetail10_Cash\modules\CashLoader\restore\keyboard-config\plugins
+keyboard-xxx-config.xml     -> SetRetail10_Cash\modules\CashLoader\config\plugins
+register-equipment.xml      -> SetRetail10_Cash\modules\CashLoader\config

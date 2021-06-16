@@ -4,15 +4,12 @@ import ru.keyboard.form.Model;
 import ru.keyboard.form.jaxb.config.XmlConfig;
 import ru.keyboard.form.jaxb.config.XmlProperty;
 
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import static ru.keyboard.form.Constants.CONFIG_FILE_ENDING;
-import static ru.keyboard.form.Constants.CONFIG_FILE_PREFIX;
+import static ru.keyboard.form.Constants.KEYBOARD_PREFIX;
 
 /**
  * Класс отвечает за формирование и сохранение config файла (заглушки для дальнейшего наполнения вручную)
@@ -20,22 +17,7 @@ import static ru.keyboard.form.Constants.CONFIG_FILE_PREFIX;
 public class ConfigWriter {
 
     public static void createConfigFile(Model model) {
-        try {
-            String configContent = createConfigContent(model);
-            System.out.println(configContent);
-            writeConfigFile(model, configContent);
-        } catch (JAXBException e) {
-            System.out.println("Problem with JAXB");
-            e.printStackTrace();
-        }
-    }
-
-    private static String createConfigContent(Model model) throws JAXBException {
-        Marshaller marshaller = Util.createMarshaller(XmlConfig.class);
-        StringWriter sw = new StringWriter();
-        Util.addHeader(sw);
-        marshaller.marshal(createConfigObject(model), sw);
-        return sw.toString();
+        Util.createFile(model, true, XmlConfig.class, ConfigWriter::createConfigObject, getFileName(model));
     }
 
     private static XmlConfig createConfigObject(Model model) {
@@ -78,9 +60,8 @@ public class ConfigWriter {
         property.setProperties(inner);
         return property;
     }
-    
-    private static void writeConfigFile(Model model, String configContent) {
-        String configFileName = CONFIG_FILE_PREFIX + model.getProviderName() + CONFIG_FILE_ENDING;
-        Util.writeFile(configFileName, configContent);
+
+    private static String getFileName(Model model) {
+        return KEYBOARD_PREFIX + model.getProviderName() + CONFIG_FILE_ENDING;
     }
 }

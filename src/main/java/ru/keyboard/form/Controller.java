@@ -5,6 +5,7 @@ import ru.keyboard.form.jaxb.map.XmlMap;
 import ru.keyboard.form.jaxb.map.XmlButton;
 import ru.keyboard.form.panels.Direction;
 import ru.keyboard.form.writers.ConfigWriter;
+import ru.keyboard.form.writers.KbdWriter;
 import ru.keyboard.form.writers.MapWriter;
 import ru.keyboard.listeners.KeyboardListener;
 
@@ -144,6 +145,7 @@ public class Controller {
         } else {
             MapWriter.createMapFile(model);
             ConfigWriter.createConfigFile(model);
+            KbdWriter.createKbdFiles(model);
         }
     }
 

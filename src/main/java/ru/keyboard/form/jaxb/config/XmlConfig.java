@@ -1,5 +1,7 @@
 package ru.keyboard.form.jaxb.config;
 
+import ru.keyboard.form.jaxb.XmlRoot;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -12,7 +14,7 @@ import java.util.List;
  */
 @XmlRootElement(name = "moduleConfig")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class XmlConfig {
+public class XmlConfig implements XmlRoot {
 
     @XmlAttribute(name = "xsi:schemaLocation")
     private final String schemaLocation = "http://crystals.ru/cash/settings ../../module-config.xsd";

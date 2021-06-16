@@ -1,15 +1,12 @@
 package ru.keyboard.form.writers;
 
 import ru.keyboard.form.Model;
-import ru.keyboard.form.jaxb.map.XmlMap;
 import ru.keyboard.form.jaxb.map.XmlButton;
 import ru.keyboard.form.jaxb.map.XmlButtonWrapper;
 import ru.keyboard.form.jaxb.map.XmlMainBlock;
+import ru.keyboard.form.jaxb.map.XmlMap;
 import ru.keyboard.form.jaxb.map.XmlTemplateButton;
 
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,22 +18,7 @@ import static ru.keyboard.form.Constants.MAP_FILE_ENDING;
 public class MapWriter {
 
     public static void createMapFile(Model model) {
-        try {
-            String mapContent = MapWriter.createMapContent(model);
-            System.out.println(mapContent);
-            MapWriter.writeMapFile(model, mapContent);
-        } catch (JAXBException e) {
-            System.out.println("Problem with JAXB");
-            e.printStackTrace();
-        }
-    }
-
-    private static String createMapContent(Model model) throws JAXBException {
-        Marshaller marshaller = Util.createMarshaller(XmlMap.class);
-        StringWriter sw = new StringWriter();
-        Util.addHeader(sw);
-        marshaller.marshal(createKeyboardMapObject(model), sw);
-        return sw.toString();
+        Util.createFile(model, true, XmlMap.class, MapWriter::createKeyboardMapObject, getFileName(model));
     }
 
     private static XmlMap createKeyboardMapObject(Model model) {
@@ -123,8 +105,7 @@ public class MapWriter {
         return buttons;
     }
 
-    private static void writeMapFile(Model model, String mapContent) {
-        String mapFileName = model.getProviderName() + MAP_FILE_ENDING;
-        Util.writeFile(mapFileName, mapContent);
+    private static String getFileName(Model model) {
+        return model.getProviderName() + MAP_FILE_ENDING;
     }
 }
