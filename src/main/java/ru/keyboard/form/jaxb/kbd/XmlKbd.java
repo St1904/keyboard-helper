@@ -11,7 +11,7 @@ import javax.xml.bind.annotation.XmlValue;
 /**
  * Класс-сущность для xxx-kbd.xml и keyboard-xxx-0-kbd.xml
  */
-@XmlRootElement(name = "keyboard-data")
+@XmlRootElement(name = "Keyboard-data")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class XmlKbd implements XmlRoot {
 
