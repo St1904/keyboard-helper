@@ -66,6 +66,7 @@ public class Controller {
     }
 
     private boolean validateModel() {
+        // TODO нам не обязательно нужен map-dir для запуска, если не нужна виртуальная мапа
         oldMapFile = getProviderMapFile();
         if (model.isVirtualMap() && oldMapFile == null) {
             System.out.println("Cannot find map file in directory: " + mapsDirectory);
