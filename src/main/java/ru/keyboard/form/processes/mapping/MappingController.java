@@ -1,9 +1,12 @@
-package ru.keyboard.form;
+package ru.keyboard.form.processes.mapping;
 
 import javafx.util.Pair;
+import ru.keyboard.form.resolvers.KeysResolver;
+import ru.keyboard.form.Model;
 import ru.keyboard.form.jaxb.map.XmlMap;
 import ru.keyboard.form.jaxb.map.XmlButton;
 import ru.keyboard.form.panels.Direction;
+import ru.keyboard.form.util.ScancodeUtil;
 import ru.keyboard.form.writers.ConfigWriter;
 import ru.keyboard.form.writers.KbdWriter;
 import ru.keyboard.form.writers.MapWriter;
@@ -26,10 +29,12 @@ import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
+ * Контроллер для создания map файлов при подключении новой клавиатуры
+ *
  * @author Sokolova
  * @since 23.01.2021
  */
-public class Controller {
+public class MappingController {
 
     private static final String MAP_FILE_ENDING = "-map.xml";
     private static final String VIRT_MAP_SEPARATOR = ",";
@@ -46,7 +51,7 @@ public class Controller {
     private final String mapsDirectory;
     private Path oldMapFile;
 
-    public Controller(Model model, String mapsDirectory) {
+    public MappingController(Model model, String mapsDirectory) {
         this.model = model;
         this.keysQueue = new LinkedBlockingQueue<>();
         // TODO нужно решать какой листенер нам нужен (например через проперти или в рантайме)
@@ -99,7 +104,7 @@ public class Controller {
 
     public void saveAndMove(KeyEvent event) {
         // записали сканкод текущей клавиши
-        model.getScanCodes()[curX][curY] = getScanCodeStr(event);
+        model.getScanCodes()[curX][curY] = ScancodeUtil.getScanCodeStr(event);
 
         // записали последнее положение
         int prevX = curX;
@@ -204,29 +209,6 @@ public class Controller {
             e.printStackTrace();
         }
         return result;
-    }
-
-    public String getScanCodeStr(KeyEvent event) {
-        return String.format("0x%08X", getScanCode(getModifiers(event), event.getKeyCode(), event.getKeyChar()));
-    }
-
-    private static long getScanCode(int modifiers, int keyCode, char keyChar) {
-        long scanCode = 0;
-        scanCode += keyChar;
-        scanCode += (long) keyCode << 0x10;
-        scanCode += (long) modifiers << 0x20;
-        return scanCode;
-    }
-
-    /**
-     * shift и ctrl не зажаты -> 0
-     * shift -> 1
-     * ctrl -> 2
-     * shift + ctrl -> 3
-     */
-    private static int getModifiers(KeyEvent keyEvent) {
-        int modifiers = keyEvent.getModifiers();
-        return modifiers & KeyEvent.SHIFT_MASK | modifiers & KeyEvent.CTRL_MASK;
     }
 
     public KeyListener getKeyListener() {

@@ -1,6 +1,7 @@
-package ru.keyboard.form;
+package ru.keyboard.form.processes.mapping;
 
-import ru.keyboard.form.panels.Direction;
+import ru.keyboard.form.MainFrame;
+import ru.keyboard.form.Model;
 import ru.keyboard.form.panels.InfoPanel;
 import ru.keyboard.form.panels.KeyboardPanel;
 
@@ -15,15 +16,15 @@ import java.awt.event.ActionListener;
 public class View implements ActionListener {
 
     private Model model;
-    private Controller controller;
+    private MappingController mappingController;
     private JFrame mainFrame;
 
     private InfoPanel infoPanel;
     private KeyboardPanel keyboardPanel;
 
-    public View(Model model, Controller controller) {
+    public View(Model model, MappingController mappingController) {
         this.model = model;
-        this.controller = controller;
+        this.mappingController = mappingController;
         mainFrame = new MainFrame();
         mainFrame.setVisible(true);
     }
@@ -39,7 +40,7 @@ public class View implements ActionListener {
     public void drawKeyboardView() {
         keyboardPanel = new KeyboardPanel(model.getRows(), model.getColumns());
         // TODO почему в методе на отрисовку добавляется keyListener?
-        mainFrame.addKeyListener(controller.getKeyListener());
+        mainFrame.addKeyListener(mappingController.getKeyListener());
         mainFrame.setContentPane(keyboardPanel);
         mainFrame.revalidate();
         // запрашиваем фокус после переключения, чтобы листенер срабатывал
@@ -55,7 +56,7 @@ public class View implements ActionListener {
         switch (e.getActionCommand()) {
             case "accept":
                 infoPanel.updateModel(model);
-                controller.accept();
+                mappingController.accept();
         }
     }
 }
