@@ -122,8 +122,9 @@ public class KeyboardListener implements KeyListener {
     }
 
     private static void log(KeyEvent keyEvent, String method) {
-        LOG.info(String.format("(%-13s) keyCode: 0x%04X, keyChar: %c (0x%04X), shift: %5b, alt: %5b, ctrl: %5b",
+        LOG.info(String.format("(%-13s) keyCode: 0x%04X, keyChar: %c (0x%04X), shift: %5b, alt: %5b, ctrl: %5b, %d, %c, %d",
                 method, keyEvent.getKeyCode(), keyEvent.getKeyChar(), (int) keyEvent.getKeyChar(),
-                keyEvent.isShiftDown(), keyEvent.isAltDown(), keyEvent.isControlDown()));
+                keyEvent.isShiftDown(), keyEvent.isAltDown(), keyEvent.isControlDown(),
+                keyEvent.getKeyCode(), keyEvent.getKeyChar(), (byte) keyEvent.getKeyChar()));
     }
 }
