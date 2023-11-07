@@ -181,6 +181,7 @@ public class MappingController {
                 String oldScanCode = oldScanCodes.get(new Pair<>(x, y));
                 if (oldScanCode == null) {
                     System.out.println("ERROR! Old scan code not found (x: " + x + ", y: " + y + ")");
+                    sb.append(s).append(VIRT_MAP_SEPARATOR).append("\n");
                 } else {
                     sb.append(s).append(VIRT_MAP_SEPARATOR).append(oldScanCode).append("\n");
                 }
